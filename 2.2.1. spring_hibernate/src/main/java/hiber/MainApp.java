@@ -37,14 +37,12 @@ public class MainApp {
             System.out.println("First Name = " + user.getFirstName());
             System.out.println("Last Name = " + user.getLastName());
             System.out.println("Email = " + user.getEmail());
-            //            System.out.println("Id = " + user.getId());System.out.println();
         }
         System.out.println("Getting users by car");
-        User usersWithCar = userService.getUserByCar(new Car("Mercedes-Benz W", 140));
-        User noUsersWithTheCar = userService.getUserByCar(new Car("Merc", 14));
-        System.out.println(usersWithCar);
-        System.out.println(noUsersWithTheCar);
-
+        User userWithCar = userService.getUserByCar(new Car("Mercedes-Benz W", 140));
+        User noUserWithTheCar = userService.getUserByCar(new Car("Merc", 14));
+        System.out.println(userWithCar);
+        System.out.println(noUserWithTheCar);
         context.close();
     }
 
