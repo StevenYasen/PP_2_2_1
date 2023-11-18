@@ -4,21 +4,21 @@ import hiber.model.Car;
 import hiber.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public class UserDaoImp implements UserDao {
-    @Autowired
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
+    @Autowired
+    public UserDaoImp(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void add(User user) {
@@ -30,21 +30,19 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<User> listUsers() {
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User", User.class);
         return query.getResultList();
     }
 
     @Override
     public User getUserByCar(Car car) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Query q1 = session.createQuery("from User u where u.car.model=:model and u.car.series=:series");
-            q1.setParameter("model", car.getModel());
-            q1.setParameter("series", car.getSeries());
-            User user = (User) q1.getSingleResult();
-            return user;
+            return sessionFactory.getCurrentSession().createQuery("from User u where u.car.model=:model" +
+                            " and u.car.series=:series", User.class)
+                    .setParameter("model", car.getModel())
+                    .setParameter("series", car.getSeries())
+                    .getSingleResult();
         } catch (Exception e) {
             return null;
         }
