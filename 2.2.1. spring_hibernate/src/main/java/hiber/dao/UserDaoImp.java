@@ -6,8 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 
@@ -29,10 +27,10 @@ public class UserDaoImp implements UserDao {
         }
     }
 
+
     @Override
     public List<User> listUsers() {
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User", User.class);
-        return query.getResultList();
+        return sessionFactory.getCurrentSession().createQuery("from User", User.class).getResultList();
     }
 
     @Override
